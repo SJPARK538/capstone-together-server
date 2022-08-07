@@ -1,0 +1,33 @@
+{
+  "name": "ls",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "devStart": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SJPARK538/capstone-together-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SJPARK538/capstone-together-server/issues"
+  },
+  "homepage": "https://github.com/SJPARK538/capstone-together-server#readme",
+  "dependencies": {
+    "@prisma/client": "^4.1.1",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "mysql": "^2.18.1",
+    "scss": "^0.2.4"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.1",
+    "nodemon": "^2.0.19",
+    "prisma": "^4.1.1"
+  }
+}
