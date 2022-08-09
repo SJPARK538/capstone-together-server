@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Job` MODIFY `dueDate` VARCHAR(191) NOT NULL;

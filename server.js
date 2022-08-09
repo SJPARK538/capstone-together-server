@@ -1,5 +1,3 @@
-// require('dotenv').config()
-// import config from "./src/config/viewEngine"
 
 
 const express = require('express');
@@ -10,9 +8,7 @@ const port = process.env.PORT || process.argv[2] || 8080;
 
 
 // config(app);
-
-const jobboardRoute = require('./src/routes/jobboard');
-const jobpostingRoute = require('./src/routes/jobposting');
+const jobRoute = require('./src/routes/job');
 const userRoute = require('./src/routes/user');
 
 
@@ -24,8 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 
-app.use('/jobboard', jobboardRoute);
-app.use('/jobposting', jobpostingRoute);
+app.use('/job', jobRoute);
 app.use('/user', userRoute);
 
 
