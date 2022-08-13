@@ -19,7 +19,7 @@ model User {
 }
 
 model Job {
-  jobid    Int      @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   title    String
   category String
   region   String
@@ -27,6 +27,6 @@ model Job {
   payRate  String
   postDate DateTime
   dueDate  String
-  user     User     @relation(fields: [user_id], references: [id])
+  author   User     @relation(fields: [user_id], references: [id])
   user_id  Int
 }

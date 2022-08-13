@@ -5,28 +5,6 @@ const fs = require('fs');
 const { userInfo } = require('os');
 
 
-// Get all job lists
-// router.get("/", async(req, res)=>{
-
-//     const joblisting = await prisma.job.findmany({
-//         select: {
-            
-//             // 'jobid': userinfo.email,
-//             // 'title': userinfo.name,
-//             // 'category': userinfo.password,
-//             // 'region':,
-//             // 'payType':,
-//             // 'payRate':,
-//             // 'postDate':,
-//             // 'dueDate':,
-
-//         }
-//     })  
-//     res.send('working')
-
-// })
-
-
 router.post("/", async(req, res)=>{
     const samplejob1 = {
         title: "find a delivery person",
@@ -36,9 +14,11 @@ router.post("/", async(req, res)=>{
         payRate: "25",
         postDate: new Date().toISOString(),
         dueDate: "Aug 27, 2022",
-        user: User
-    }  
-
+        user_id: 1,
+        include: {
+            author: true
+        }
+    }
     const test = await prisma.job.create({
         data: {
             'title': samplejob1.title,
@@ -48,13 +28,38 @@ router.post("/", async(req, res)=>{
             'payRate': samplejob1.payRate,
             'postDate':samplejob1.postDate,
             'dueDate':samplejob1.dueDate,
-            'user': samplejob1.user
-
+            'user_id':samplejob1.user_id,
+            'author': samplejob1.author
         }
     })  
     res.send(test)
     console.log(test)
 })
+
+
+// Get all job lists
+// router.get("/", async(req, res)=>{
+
+//     const joblisting = await prisma.job.findmany({
+//         select: {
+            
+//             'jobid': userinfo.email,
+//             'title': userinfo.name,
+//             'category': userinfo.password,
+//             'region':,
+//             'payType':,
+//             'payRate':,
+//             'postDate':,
+//             'dueDate':,
+
+//         }
+//     })  
+//     res.send('working')
+
+// })
+
+
+
 
 module.exports = router;
 
