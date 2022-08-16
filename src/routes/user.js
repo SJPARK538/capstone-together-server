@@ -39,20 +39,26 @@ router.post("/", async(req,res)=>{
 
 
 
-// GET USER LIST
+// GET USER LISTS
 router.get("/", async(req, res)=>{
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+        include: {job: true}
+    });
+    
+
     res.json(users);
+
 })
 
 // GET A SIGNEL USER INFORMATOIN BY ID
 router.get("/:id", async(req, res)=>{
     const id = req.params.id;
-    const users = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
         where: {
-            id: id,
-        }
-    })
+            id: Number(id)
+        },
+    });
+    res.json(user)
 })
 
 
@@ -61,7 +67,7 @@ router.put("/", async(req, res)=>{
     const {id, job, email} = req.body
     const updatedUser = await prisma.user.update({
         where: {
-            id: id
+            id: Number(id)
         },
         data: {
             job: job,
@@ -71,12 +77,12 @@ router.put("/", async(req, res)=>{
     res.json(updatedUser);
 })
 
-
+// DELETE A USER BY ID 
 router.delete("/:id", async(req, res)=>{
     const id = req.params.id
     const deletedUser = await prisma.user.delete({
         where: {
-            id: id,
+            id: Number(id)
 
         }
     })

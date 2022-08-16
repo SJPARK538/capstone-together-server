@@ -4,20 +4,22 @@ const prisma = new PrismaClient();
 const fs = require('fs');
 const { userInfo } = require('os');
 
+
+
 // CREATE A SAMPLE JOB LIST 
 // router.post("/", async(req, res)=>{
 //     const samplejob1 = {
-//         title: "find a delivery person",
-//         category: "delivery",
-//         region: "North York",
-//         payType: "Flat",
-//         payRate: "25",
-//         postDate: new Date().toISOString(),
-//         dueDate: "Aug 27, 2022",
-//         user_id: 1,
-//         include: {
-//             author: true
-//         }
+//    {     // title: "find a delivery person",
+        // category: "delivery",
+        // region: "North York",
+        // payType: "Flat",
+        // payRate: "25",
+        // postDate: new Date().toISOString(),
+        // dueDate: "Aug 27, 2022",
+        // user_id: 1,
+        // include: {
+        //     author: true
+        // }}
 //     }
 //     const test = await prisma.job.create({
 //         data: {
@@ -59,25 +61,47 @@ const { userInfo } = require('os');
 
 // CREATE A JOB 
 router.post("/", async(req,res)=>{
-    const {title, category, region, payType, payRate, postDate, dueDate} = req.body;
+    const {title, category, region, payType, payRate, postDate, dueDate, user_id} = req.body;
     const job  = await prisma.job.create({
         data: {
-                        title: title,
-                        category: category,
-                        region: region, 
-                        payType: payType,
-                        payRate:payRate,
-                        postDate: postDate,
-                        dueDate: dueDate,
-                        include: {author: true}
-        }
+                title: title,
+                category: category,
+                region: region, 
+                payType: payType,
+                payRate: payRate,
+                postDate: new Date().toISOString(),
+                dueDate: dueDate,
+                user_id: user_id,
+            },
+            include: {
+                author: true
+            }
     })
-    res.json(user);
+    res.json(job);
 })
 
 
 module.exports = router;
 
-// Get a job list with matched ID
-// Post a job into the job listings
-// Delete a job with matched ID on the job listings
+// GET JOB LISTS
+router.get("/", async(req, res)=>{
+    const {jobList} = req.body;
+    const jobs = await prisma.job.findMany({
+        data: jobList
+    });
+    res.json(jobs);
+
+})
+
+// GET A SINGLE JOB LIST BY jobID
+router.get("/:id", async(req, res)=>{
+    const id = req.params.id;
+    const job = await prisma.job.findUnique({
+        where: {
+            id: Number(id),
+        },
+    });
+    res.json(job)
+})
+
+// DELETE A SINGLE JOB LIST BY ID
