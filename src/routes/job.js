@@ -3,6 +3,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const fs = require('fs');
 const { userInfo } = require('os');
+const {DateTime} =require('luxon');
 
 
 
@@ -10,16 +11,16 @@ const { userInfo } = require('os');
 // router.post("/", async(req, res)=>{
 //     const samplejob1 = {
 //    {     // title: "find a delivery person",
-        // category: "delivery",
-        // region: "North York",
-        // payType: "Flat",
-        // payRate: "25",
-        // postDate: new Date().toISOString(),
-        // dueDate: "Aug 27, 2022",
-        // user_id: 1,
-        // include: {
-        //     author: true
-        // }}
+//         category: "delivery",
+//         region: "North York",
+//         payType: "Flat",
+//         payRate: "25",
+//         postDate: new Date().toISOString(),
+//         dueDate: "Aug 27, 2022",
+//         user_id: 1,
+//         include: {
+//             author: true
+//         }}
 //     }
 //     const test = await prisma.job.create({
 //         data: {
@@ -62,6 +63,8 @@ const { userInfo } = require('os');
 // CREATE A JOB 
 router.post("/", async(req,res)=>{
     const {title, category, region, payType, payRate, postDate, dueDate, user_id} = req.body;
+    console.log(DateTime.fromFormat(postDate, 'MM, dd,yyyy').toJSDate())
+    console.log(DateTime.fromFormat(dueDate, 'MM, dd,yyyy').toJSDate())
     const job  = await prisma.job.create({
         data: {
                 title: title,
@@ -69,9 +72,11 @@ router.post("/", async(req,res)=>{
                 region: region, 
                 payType: payType,
                 payRate: payRate,
-                postDate: new Date().toISOString(),
-                dueDate: dueDate,
-                user_id: user_id,
+                postDate: DateTime.fromFormat(postDate, 'MM, dd,yyyy').toJSDate(),
+                dueDate: DateTime.fromFormat(dueDate, 'MM, dd,yyyy').toJSDate(),
+                author: {
+                    connect: {id: user_id}
+                }
             },
             include: {
                 author: true
