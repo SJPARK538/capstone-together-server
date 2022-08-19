@@ -6,7 +6,6 @@ const { userInfo } = require('os');
 const {DateTime} =require('luxon');
 
 
-
 // CREATE A SAMPLE JOB LIST 
 // router.post("/", async(req, res)=>{
 //     const samplejob1 = {
@@ -39,27 +38,6 @@ const {DateTime} =require('luxon');
 // })
 
 
-// Get all job lists
-// router.get("/", async(req, res)=>{
-
-//     const joblisting = await prisma.job.findmany({
-//         select: {
-            
-//             'jobid': userinfo.email,
-//             'title': userinfo.name,
-//             'category': userinfo.password,
-//             'region':,
-//             'payType':,
-//             'payRate':,
-//             'postDate':,
-//             'dueDate':,
-
-//         }
-//     })  
-//     res.send('working')
-
-// })
-
 // CREATE A JOB 
 router.post("/", async(req,res)=>{
     const {title, category, region, payType, payRate, postDate, dueDate, user_id} = req.body;
@@ -86,8 +64,6 @@ router.post("/", async(req,res)=>{
 })
 
 
-module.exports = router;
-
 // GET JOB LISTS
 router.get("/", async(req, res)=>{
     const {jobList} = req.body;
@@ -110,3 +86,15 @@ router.get("/:id", async(req, res)=>{
 })
 
 // DELETE A SINGLE JOB LIST BY ID
+router.delete("/:id", async(req, res)=>{
+    const id = req.params.id
+    const deletedJob = await prisma.job.delete({
+        where: {
+            id: Number(id)
+
+        }
+    })
+    res.json(deletedJob)
+})
+
+module.exports = router;
