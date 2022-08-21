@@ -39,7 +39,7 @@ const {DateTime} =require('luxon');
 
 
 // CREATE A JOB 
-router.post("/", async(req,res)=>{
+router.post("/add", async(req,res)=>{
     const {title, category, region, payType, payRate, description, postDate, dueDate, user_id} = req.body;
     console.log(DateTime.fromFormat(postDate, 'MM, dd,yyyy').toJSDate())
     console.log(DateTime.fromFormat(dueDate, 'MM, dd,yyyy').toJSDate())
