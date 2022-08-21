@@ -40,7 +40,7 @@ const {DateTime} =require('luxon');
 
 // CREATE A JOB 
 router.post("/", async(req,res)=>{
-    const {title, category, region, payType, payRate, postDate, dueDate, user_id} = req.body;
+    const {title, category, region, payType, payRate, description, postDate, dueDate, user_id} = req.body;
     console.log(DateTime.fromFormat(postDate, 'MM, dd,yyyy').toJSDate())
     console.log(DateTime.fromFormat(dueDate, 'MM, dd,yyyy').toJSDate())
     const job  = await prisma.job.create({
@@ -50,6 +50,7 @@ router.post("/", async(req,res)=>{
                 region: region, 
                 payType: payType,
                 payRate: payRate,
+                description: description,
                 postDate: DateTime.fromFormat(postDate, 'MM, dd,yyyy').toJSDate(),
                 dueDate: DateTime.fromFormat(dueDate, 'MM, dd,yyyy').toJSDate(),
                 author: {
