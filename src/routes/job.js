@@ -39,29 +39,30 @@ const {DateTime} =require('luxon');
 
 
 // CREATE A JOB 
-router.post("/add", async(req,res)=>{
+router.post("/", async(req,res)=>{
     const {title, category, region, payType, payRate, description, postDate, dueDate, user_id} = req.body;
     console.log(DateTime.fromFormat(postDate, 'MM, dd,yyyy').toJSDate())
     console.log(DateTime.fromFormat(dueDate, 'MM, dd,yyyy').toJSDate())
-    const job  = await prisma.job.create({
-        data: {
-                title: title,
-                category: category,
-                region: region, 
-                payType: payType,
-                payRate: payRate,
-                description: description,
-                postDate: DateTime.fromFormat(postDate, 'MM, dd,yyyy').toJSDate(),
-                dueDate: DateTime.fromFormat(dueDate, 'MM, dd,yyyy').toJSDate(),
-                author: {
-                    connect: {id: user_id}
-                }
-            },
-            include: {
-                author: true
-            }
-    })
-    res.json(job);
+    console.log(req.body)
+    // const job  = await prisma.job.create({
+    //     data: {
+    //             title: title,
+    //             category: category,
+    //             region: region, 
+    //             payType: payType,
+    //             payRate: payRate,
+    //             description: description,
+    //             postDate: DateTime.fromFormat(postDate, 'MM, dd,yyyy').toJSDate(),
+    //             dueDate: DateTime.fromFormat(dueDate, 'MM, dd,yyyy').toJSDate(),
+    //             author: {
+    //                 connect: {id: user_id}
+    //             }
+    //         },
+    //         include: {
+    //             author: true
+    //         }
+    // })
+    // res.json(job);
 })
 
 
