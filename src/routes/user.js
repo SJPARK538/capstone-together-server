@@ -6,7 +6,7 @@ const fs = require('fs');
 // SIGN UP -CREATE A SAMPLE USER
 // router.post("/", async(req, res)=>{
 //     const userinfo = {
-//         email: "abc@test.com",
+//         email: "",
 //         name: "sejin park",
 //         password: "default"
 //     }  

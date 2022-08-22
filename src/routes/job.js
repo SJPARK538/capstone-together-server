@@ -44,25 +44,25 @@ router.post("/", async(req,res)=>{
     console.log(DateTime.fromFormat(postDate, 'MM, dd,yyyy').toJSDate())
     console.log(DateTime.fromFormat(dueDate, 'MM, dd,yyyy').toJSDate())
     console.log(req.body)
-    // const job  = await prisma.job.create({
-    //     data: {
-    //             title: title,
-    //             category: category,
-    //             region: region, 
-    //             payType: payType,
-    //             payRate: payRate,
-    //             description: description,
-    //             postDate: DateTime.fromFormat(postDate, 'MM, dd,yyyy').toJSDate(),
-    //             dueDate: DateTime.fromFormat(dueDate, 'MM, dd,yyyy').toJSDate(),
-    //             author: {
-    //                 connect: {id: user_id}
-    //             }
-    //         },
-    //         include: {
-    //             author: true
-    //         }
-    // })
-    // res.json(job);
+    const job  = await prisma.job.create({
+        data: {
+                title: title,
+                category: category,
+                region: region, 
+                payType: payType,
+                payRate: payRate,
+                description: description,
+                postDate: DateTime.fromFormat(postDate, 'MM, dd,yyyy').toJSDate(),
+                dueDate: DateTime.fromFormat(dueDate, 'MM, dd,yyyy').toJSDate(),
+                author: {
+                    connect: {id: user_id}
+                }
+            },
+            include: {
+                author: true
+            }
+    })
+    res.json(job);
 })
 
 
