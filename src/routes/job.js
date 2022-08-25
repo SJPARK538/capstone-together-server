@@ -55,7 +55,8 @@ router.post("/", async(req,res)=>{
                 postDate: DateTime.fromFormat(postDate, 'MM, dd,yyyy').toJSDate(),
                 dueDate: DateTime.fromFormat(dueDate, 'MM, dd,yyyy').toJSDate(),
                 author: {
-                    connect: {id: user_id}
+                    // connect: {id: user_id}   
+                    connect: {id: 1}   // testing
                 }
             },
             include: {
