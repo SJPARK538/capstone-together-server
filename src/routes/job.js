@@ -43,8 +43,7 @@ router.post("/", async(req,res)=>{
     const {title, category, region, payType, payRate, description, postDate, dueDate, user_id} = req.body;
     console.log(DateTime.fromISO(postDate))
 
-    // console.log(DateTime.fromFormat(dueDate, 'MM, dd,yyyy').toJSDate())
-    // console.log(req.body)
+
     const job  = await prisma.job.create({
         data: {
                 title: title,
@@ -55,8 +54,7 @@ router.post("/", async(req,res)=>{
                 description: description,
                 postDate: DateTime.fromISO(postDate).toJSDate(),
                 dueDate: DateTime.fromISO(dueDate).toJSDate(),
-                // postDate: DateTime.fromFormat(postDate, 'MM, dd,yyyy').toJSDate(),
-                // dueDate: DateTime.fromFormat(dueDate, 'MM, dd,yyyy').toJSDate(),
+            
                 author: {
                     // connect: {id: user_id}   
                     connect: {id: 1}   // testing
@@ -97,7 +95,6 @@ router.delete("/:id", async(req, res)=>{
     const deletedJob = await prisma.job.delete({
         where: {
             id: Number(id)
-
         }
     })
     res.json(deletedJob)

@@ -3,7 +3,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const fs = require('fs');
 
-// SIGN UP -CREATE A SAMPLE USER
+// SIGN UP -CREATE A SAMPLE USER testing
 // router.post("/", async(req, res)=>{
 //     const userinfo = {
 //         email: "",
@@ -37,15 +37,12 @@ router.post("/", async(req,res)=>{
     res.json(user);
 })
 
-
-
 // GET USER LISTS
 router.get("/", async(req, res)=>{
     const users = await prisma.user.findMany({
         include: {job: true}
     });
     
-
     res.json(users);
 
 })
@@ -83,7 +80,6 @@ router.delete("/:id", async(req, res)=>{
     const deletedUser = await prisma.user.delete({
         where: {
             id: Number(id)
-
         }
     })
     res.json(deletedUser)
