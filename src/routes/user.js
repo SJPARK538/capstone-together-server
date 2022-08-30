@@ -22,6 +22,10 @@ const fs = require('fs');
 //     res.send(test)
 // })
 
+router.get('/login', (req,res) => res.send('login'))
+
+
+router.get('/register', (req,res) => res.send('register'))
 
 
 // CREATE A USER

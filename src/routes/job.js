@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const fs = require('fs');
-const { userInfo } = require('os');
+// const { userInfo } = require('os');
 const {DateTime} =require('luxon');
 
 

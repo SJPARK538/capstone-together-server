@@ -1,14 +1,18 @@
 const router = require('express').Router();
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
-const { route } = require('./job');
 
 
-// router.get('/login', (req, res) =>{
-//     res.json({
-//         message: 'login success'
-//     })
-// })
+
+//Login Page
+router.get('/', (req, res) =>{
+    res.json({
+        message: 'login success'
+    })
+})
+
+
+
 
 // router.post('/login',verifyToken, (req,res) => {
 //     res.json({
