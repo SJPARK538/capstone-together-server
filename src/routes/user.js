@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const fs = require('fs');
+const bcrypt = require('bcryptjs')
 
 // SIGN UP -CREATE A SAMPLE USER testing
 // router.post("/", async(req, res)=>{
@@ -22,23 +23,64 @@ const fs = require('fs');
 //     res.send(test)
 // })
 
-router.get('/login', (req,res) => res.send('login'))
+// router.get('/login', (req,res) => res.send('login'))
 
 
-router.get('/register', (req,res) => res.send('register'))
+// router.get('/register', (req,res) => res.send('register'))
 
 
 // CREATE A USER
-router.post("/", async(req,res)=>{
+// router.post("/register", async(req,res)=>{
+//     const {name, email, password} = req.body;
+//     const user  = await prisma.user.create({
+//         data: {
+//             name: name,
+//             email: email,
+//             password: password,
+//         }
+//     })
+//     res.json(user);
+// })
+
+
+
+router.post("/register", async(req,res)=>{
     const {name, email, password} = req.body;
-    const user  = await prisma.user.create({
-        data: {
-            name: name,
-            email: email,
-            password: password,
-        }
-    })
-    res.json(user);
+    try {
+        if (!name || !email || !password){
+            res
+            .status(400)
+            .json({error: "Please fill all fields"});
+        } else {
+            const user  = await prisma.user.create({
+                data: {
+                    name: name,
+                    email: email,
+                    password: password,
+                }
+            });
+            //Hash password
+            bcrypt.genSalt(10, (err,salt) => 
+            bcrypt.hash(user.password, salt, (err, hash) =>{ 
+                if(err) throw err;
+                //Set password to hashed
+                user.password = hash;
+                user.save()
+                .then( user => {
+                    res.redirect('/login').json(user)
+                })
+                
+            }))
+
+            // res.status(200).json(user);
+        }   
+        // Hash Password
+        
+
+    } catch (error){
+        console.log(error);
+        res.status(500);
+    }
 })
 
 // GET USER LISTS
