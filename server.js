@@ -9,7 +9,7 @@ const port = process.env.PORT || process.argv[2] || 8080;
 // config(app);
 const jobRoute = require('./src/routes/job');
 const userRoute = require('./src/routes/user');
-// const loginRoute = require('./src/routes/login');
+
 
 
 
@@ -21,14 +21,13 @@ app.use(express.json());
 
 
 //Bodyparser
-app.use(express.urlencoded({ extended: false}))
+app.use(express.urlencoded({ extended: true}))
+app.use(bodyParser.json())
 
 
 // Routes
 app.use('/job', jobRoute);
 app.use('/user', userRoute);
-// app.use('/login', loginRoute);
-
 
 
 app.listen(port, () => {

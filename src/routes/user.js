@@ -2,7 +2,12 @@ const router = require('express').Router();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const fs = require('fs');
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
+const jwt = require('../config/jwt');
+const { validationResult } = require('express-validator');
+const {check} = require("express-validator")
+require('dotenv').config();
+
 
 // SIGN UP -CREATE A SAMPLE USER testing
 // router.post("/", async(req, res)=>{
@@ -23,11 +28,6 @@ const bcrypt = require('bcryptjs')
 //     res.send(test)
 // })
 
-// router.get('/login', (req,res) => res.send('login'))
-
-
-// router.get('/register', (req,res) => res.send('register'))
-
 
 // CREATE A USER
 // router.post("/register", async(req,res)=>{
@@ -42,46 +42,96 @@ const bcrypt = require('bcryptjs')
 //     res.json(user);
 // })
 
+router.post('/register', [
+    check("email", "Please provide a valid email address").isEmail(),
+    check("password", "Please provide a password that is greater than 5 characters").isLength({min: 6})
+], async(req,res) => {
+    const {password, email, name } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10)
+    
 
+    //VALIDATE THE INPUT
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({
+            errors: errors.array()
+        })
+    }
+    // VALIDATE IF USER DOESN'T ALREADY EXIST
+    const existUser = await prisma.user.findUnique({
+        where: 
+            {
+                email: email
+            }
+    })
 
-router.post("/register", async(req,res)=>{
-    const {name, email, password} = req.body;
-    try {
-        if (!name || !email || !password){
-            res
-            .status(400)
-            .json({error: "Please fill all fields"});
-        } else {
-            const user  = await prisma.user.create({
-                data: {
-                    name: name,
-                    email: email,
-                    password: password,
-                }
-            });
-            //Hash password
-            bcrypt.genSalt(10, (err,salt) => 
-            bcrypt.hash(user.password, salt, (err, hash) =>{ 
-                if(err) throw err;
-                //Set password to hashed
-                user.password = hash;
-                user.save()
-                .then( user => {
-                    res.redirect('/login').json(user)
+    if(existUser){
+        res.status(400).json({
+            "msg": "This user already exist"
+        })
+    } else if(!existUser) {
+        const user  = await prisma.user.create({   
+                    data: {
+                        name: name,
+                        email: email,
+                        password: hashedPassword
+                    }
+                    
+            
                 })
                 
-            }))
 
-            // res.status(200).json(user);
-        }   
-        // Hash Password
-        
-
-    } catch (error){
-        console.log(error);
-        res.status(500);
+                res.json(user)
     }
+
+    // let hashedPassword = await bcrypt.hash(password, 10 )
+
+
 })
+
+
+
+
+
+// router.post("/register", async(req,res)=>{
+//     const {name, email, password} = req.body;
+//     try {
+//         if (!name || !email || !password){
+//             res
+//             .status(400)
+//             .json({error: "Please fill all fields"});
+//         } else {
+//             const user  = await prisma.user.create({
+//                 data: {
+//                     name: name,
+//                     email: email,
+//                     password: password,
+//                 }
+//             });
+//             //Hash password
+//             bcrypt.genSalt(10, (err,salt) => 
+//             bcrypt.hash(user.password, salt, (err, hash) =>{ 
+//                 if(err) throw err;
+//                 //Set password to hashed
+//                 user.password = hash;
+//                 // Save user?
+//                 // user.save()
+//                 // .then( user => {
+//                 //     res.redirect('/login').json(user)
+//                 // })
+//             }))
+//             res.redirect('./login').json(user)
+//         }   
+
+//     } catch (error){
+//         console.log(error);
+//         res.status(500);
+//     }
+// })
+
+
+
+
 
 // GET USER LISTS
 router.get("/", async(req, res)=>{
