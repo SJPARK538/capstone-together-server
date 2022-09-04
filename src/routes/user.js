@@ -6,6 +6,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('../config/jwt');
 const { validationResult } = require('express-validator');
 const {check} = require("express-validator")
+const user = require('../controllers/authControl')
+const auth = require('../config/auth')
 require('dotenv').config();
 
 
@@ -42,15 +44,17 @@ require('dotenv').config();
 //     res.json(user);
 // })
 
+
+/////////////////CREATE A USER ON REGISTER FORM/////////////////
 router.post('/register', [
     check("email", "Please provide a valid email address").isEmail(),
     check("password", "Please provide a password that is greater than 5 characters").isLength({min: 6})
 ], async(req,res) => {
     const {password, email, name } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await bcrypt.hashSync(password, 10)
     
 
-    //VALIDATE THE INPUT
+    // VALIDATE THE INPUT
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         return res.status(400).json({
@@ -71,69 +75,22 @@ router.post('/register', [
         })
     } else if(!existUser) {
         const user  = await prisma.user.create({   
-                    data: {
-                        name: name,
-                        email: email,
-                        password: hashedPassword
-                    }
-                    
-            
-                })
-                
-
-                res.json(user)
+            data: {
+                name: name,
+                email: email,
+                password: hashedPassword
+            }
+        })
+        // req.flash("success_msg", "You are now Registered and can login")
+        res.json(user)
     }
-
-    // let hashedPassword = await bcrypt.hash(password, 10 )
-
-
 })
 
 
+///////////////// LOGIN /////////////////
+router.post('/login', user.login);
 
-
-
-// router.post("/register", async(req,res)=>{
-//     const {name, email, password} = req.body;
-//     try {
-//         if (!name || !email || !password){
-//             res
-//             .status(400)
-//             .json({error: "Please fill all fields"});
-//         } else {
-//             const user  = await prisma.user.create({
-//                 data: {
-//                     name: name,
-//                     email: email,
-//                     password: password,
-//                 }
-//             });
-//             //Hash password
-//             bcrypt.genSalt(10, (err,salt) => 
-//             bcrypt.hash(user.password, salt, (err, hash) =>{ 
-//                 if(err) throw err;
-//                 //Set password to hashed
-//                 user.password = hash;
-//                 // Save user?
-//                 // user.save()
-//                 // .then( user => {
-//                 //     res.redirect('/login').json(user)
-//                 // })
-//             }))
-//             res.redirect('./login').json(user)
-//         }   
-
-//     } catch (error){
-//         console.log(error);
-//         res.status(500);
-//     }
-// })
-
-
-
-
-
-// GET USER LISTS
+///////////////// GET USER LISTS /////////////////
 router.get("/", async(req, res)=>{
     const users = await prisma.user.findMany({
         include: {job: true}
@@ -143,7 +100,7 @@ router.get("/", async(req, res)=>{
 
 })
 
-// GET A SIGNEL USER INFORMATOIN BY ID
+///////////////// GET A SINGLE USER INFORMATOIN BY ID /////////////////
 router.get("/:id", async(req, res)=>{
     const id = req.params.id;
     const user = await prisma.user.findUnique({
@@ -155,7 +112,7 @@ router.get("/:id", async(req, res)=>{
 })
 
 
-// UPDATE USER INFORMATION
+///////////////// UPDATE USER INFORMATION /////////////////
 router.put("/", async(req, res)=>{
     const {id, job, email} = req.body
     const updatedUser = await prisma.user.update({
@@ -170,7 +127,7 @@ router.put("/", async(req, res)=>{
     res.json(updatedUser);
 })
 
-// DELETE A USER BY ID 
+///////////////// DELETE A USER BY ID /////////////////
 router.delete("/:id", async(req, res)=>{
     const id = req.params.id
     const deletedUser = await prisma.user.delete({

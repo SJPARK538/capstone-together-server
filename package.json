@@ -24,16 +24,20 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
     "check": "^1.0.0",
+    "connect-flash": "^0.1.1",
     "cors": "^2.8.5",
     "ejs": "^3.1.8",
     "express": "^4.18.1",
+    "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
+    "flash": "^1.1.0",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "jwt-simple": "^0.5.6",
     "luxon": "^3.0.1",
     "mysql": "^2.18.1",
-    "scss": "^0.2.4"
+    "scss": "^0.2.4",
+    "session": "^0.1.0"
   },
   "devDependencies": {
     "dotenv": "^16.0.1",
