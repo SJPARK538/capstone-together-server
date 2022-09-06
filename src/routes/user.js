@@ -11,39 +11,6 @@ const auth = require('../config/auth')
 require('dotenv').config();
 
 
-// SIGN UP -CREATE A SAMPLE USER testing
-// router.post("/", async(req, res)=>{
-//     const userinfo = {
-//         email: "",
-//         name: "sejin park",
-//         password: "default"
-//     }  
-
-//     const test = await prisma.user.create({
-//         data: {
-//             'email': userinfo.email,
-//             'name': userinfo.name,
-//             'password': userinfo.password
-
-//         }
-//     })  
-//     res.send(test)
-// })
-
-
-// CREATE A USER
-// router.post("/register", async(req,res)=>{
-//     const {name, email, password} = req.body;
-//     const user  = await prisma.user.create({
-//         data: {
-//             name: name,
-//             email: email,
-//             password: password,
-//         }
-//     })
-//     res.json(user);
-// })
-
 
 /////////////////CREATE A USER ON REGISTER FORM/////////////////
 router.post('/register', [
