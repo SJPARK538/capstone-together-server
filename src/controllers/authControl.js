@@ -3,20 +3,6 @@ const createError = require('http-errors');
 
 
 class authControl {
-    // static register = async (req, res, next) => {
-    //     try {
-    //         const user = await auth.register(req.body);
-    //         res.status(200).json({
-    //             status: true,
-    //             message: 'User created successfully',
-    //             data: user
-    //         })
-      
-    //     }
-    //     catch (e) {
-    //         next(createError(e.statusCode, e.message))
-    //     }
-    // }
     static login = async (req, res, next) => {
          try {
             const data = await auth.login(req.body)
