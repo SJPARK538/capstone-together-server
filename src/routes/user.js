@@ -3,11 +3,11 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
-const jwt = require('../config/jwt');
+// const jwt = require('../config/jwt'); not used
 const { validationResult } = require('express-validator');
 const {check} = require("express-validator")
 const user = require('../controllers/authControl')
-const auth = require('../config/auth')
+const auth = require('../config/auth') //not used
 require('dotenv').config();
 
 
@@ -68,15 +68,32 @@ router.get("/", async(req, res)=>{
 })
 
 ///////////////// GET A SINGLE USER INFORMATOIN BY ID /////////////////
-router.get("/:id", async(req, res)=>{
-    const id = req.params.id;
+// router.get("/:id", async(req, res)=>{
+//     const id = req.params.id;
+//     const user = await prisma.user.findUnique({
+//         where: {
+//             id: Number(id)
+//         },
+//     });
+//     res.json(user)
+// })
+
+router.get("/", auth, async (req, res) => {
+    const userId = req.user.id;
     const user = await prisma.user.findUnique({
-        where: {
-            id: Number(id)
-        },
+      where: {
+        id: userId,
+      },
+      select: {
+        name: true,
+        email: true,
+        password: true,
+      },
     });
-    res.json(user)
-})
+    res.json(user);
+  });
+
+
 
 
 ///////////////// UPDATE USER INFORMATION /////////////////

@@ -22,7 +22,7 @@ class AuthService {
         }
         
         static async login(data) {
-            const { email, password,name } = data;
+            const { email, password } = data;
             const user = await prisma.user.findUnique({
                 where: {
                     email
@@ -46,5 +46,3 @@ class AuthService {
   
     
   module.exports = AuthService;
-
-  
